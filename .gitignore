@@ -1,2 +1,5 @@
 env
+wifi_lamp.ini
+**/.idea
+**/*.pyc
 

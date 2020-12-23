@@ -1,0 +1,9 @@
+[odoo]
+address = localhost
+port = 8080
+database = db
+username = admin
+password = admin
+
+[wifi]
+ip_address = 1.2.3.4
