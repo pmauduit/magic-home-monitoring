@@ -48,7 +48,9 @@ if __name__ == "__main__":
             wl.off()
             attendance_already_warned_today = True
         else:
-            logging.info("time not reached yet for this week, or already warned (%s)", time_week)
+            logging.info("time not reached yet for this week, or already warned (%d:%02d:%02d)",
+                        time_week.days * 24 + time_week.seconds // 3600,
+                         (time_week.seconds // 60) % 60, time_week.seconds % 60)
 
         # check if everything is ok on Grafana
 
