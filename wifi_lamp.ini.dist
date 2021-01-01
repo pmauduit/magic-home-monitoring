@@ -7,3 +7,15 @@ password = admin
 
 [wifi]
 ip_address = 1.2.3.4
+
+[grafana]
+host = grafana.mydomain.org
+token = my_secret_token
+# list of datasources, separated using comas
+datasources = ds1,ds2
+# On each datasources, the module will expect a list of probes, also separated by comas
+# which will be checked
+probes = probe1,probe2
+# The value indicating that everything is fine, if different
+# than the indicated value, then the lamp should light up
+ok_value = 0

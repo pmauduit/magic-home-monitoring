@@ -4,6 +4,7 @@ import datetime
 import time
 import logging
 
+from modules import grafana
 from modules import odoo
 from modules import wifi_lamp
 
@@ -18,6 +19,11 @@ if __name__ == "__main__":
                             config['odoo']['database'],
                             config['odoo']['username'],
                             config['odoo']['password'])
+    gf_module = grafana.grafana(config['grafana']['host'],
+                                config['grafana']['token'],
+                                config['grafana']['datasources'],
+                                config['grafana']['probes'],
+                                config['grafana']['ok_value'])
 
     attendance_already_warned_today = False
     last_check = datetime.datetime.now()
@@ -53,6 +59,14 @@ if __name__ == "__main__":
                          (time_week.seconds // 60) % 60, time_week.seconds % 60)
 
         # check if everything is ok on Grafana
+        logging.info("Checking if Monitoring / Grafana is OK")
+        if not gf_module.compute_status():
+            logging.info("alert on the monitoring, triggering an alert")
+            wl.red_alert()
+            time.sleep(10)
+            wl.off()
+        else:
+            logging.info("No alert to report on Grafana")
 
         # Resets counters, if day changed
         if datetime.datetime.now().day != last_check.day:

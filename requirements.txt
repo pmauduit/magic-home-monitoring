@@ -1,3 +1,5 @@
-python-magichue
+grafana_api
 odoorpc
+python-magichue
 pytz
+requests
