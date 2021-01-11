@@ -8,7 +8,7 @@ from modules import grafana
 from modules import odoo
 from modules import wifi_lamp
 
-logging.basicConfig(level="INFO")
+logging.basicConfig(level="INFO", format="%(asctime)s:%(levelname)s: %(message)s")
 
 if __name__ == "__main__":
     config = configparser.ConfigParser()
@@ -55,7 +55,7 @@ if __name__ == "__main__":
             attendance_already_warned_today = True
         else:
             logging.info("time not reached yet for this week, or already warned (%d:%02d:%02d)",
-                        time_week.days * 24 + time_week.seconds // 3600,
+                         time_week.days * 24 + time_week.seconds // 3600,
                          (time_week.seconds // 60) % 60, time_week.seconds % 60)
 
         # check if everything is ok on Grafana
