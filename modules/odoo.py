@@ -50,5 +50,5 @@ class odoo:
                 total_time_today += (checkout_dt - checkin_dt).total_seconds()
             return timedelta(seconds=total_time_today)
         except urllib.error.URLError as e:
-            logging.error("Unable to connect to Odoo", e)
+            logging.error("Unable to connect to Odoo", exc_info=True)
             return timedelta(seconds=0)
