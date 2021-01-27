@@ -1,5 +1,5 @@
 import time
-
+import logging
 import requests
 from grafana_api.grafana_face import GrafanaFace
 
@@ -46,8 +46,12 @@ class grafana:
         return int(resp_json['data']['result'][0]['value'][1]) == 0
 
     def compute_status(self):
-        result = 0
-        for ds in self._datasource_id:
-            for p in self._probes:
-                result += self._get_current_status(ds, p)
-        return result == self._ok_value and self.check_jira_issues()
+        try:
+            result = 0
+            for ds in self._datasource_id:
+                for p in self._probes:
+                    result += self._get_current_status(ds, p)
+            return result == self._ok_value and self.check_jira_issues()
+        except Exception as e:
+            logging.error("Unable to connect to Grafana", exc_info=True)
+            return True
