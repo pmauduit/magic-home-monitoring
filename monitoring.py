@@ -44,19 +44,22 @@ if __name__ == "__main__":
             logging.info("time not reached yet for today, or already warned (%s)", time_today)
 
         # check if week attendance is > supposed weekly working time
-        time_week = odoo_client.get_total_attendance(period="weekly")
-        hours_week = time_week.seconds // 3600
-        minutes_week = (time_week.seconds // 60) % 60
-        if (hours_week >= 38) and (minutes_week >= 30) and not attendance_already_warned_today:
-            logging.info("time is up for this week")
-            wl.green_alert()
-            time.sleep(60)
-            wl.off()
-            attendance_already_warned_today = True
+        if datetime.date.today().weekday() == 4:
+            time_week = odoo_client.get_total_attendance(period="weekly")
+            hours_week = time_week.seconds // 3600
+            minutes_week = (time_week.seconds // 60) % 60
+            if (hours_week >= 38) and (minutes_week >= 30) and not attendance_already_warned_today:
+                logging.info("time is up for this week")
+                wl.green_alert()
+                time.sleep(60)
+                wl.off()
+                attendance_already_warned_today = True
+            else:
+                logging.info("time not reached yet for this week, or already warned (%d:%02d:%02d)",
+                             time_week.days * 24 + time_week.seconds // 3600,
+                             (time_week.seconds // 60) % 60, time_week.seconds % 60)
         else:
-            logging.info("time not reached yet for this week, or already warned (%d:%02d:%02d)",
-                         time_week.days * 24 + time_week.seconds // 3600,
-                         (time_week.seconds // 60) % 60, time_week.seconds % 60)
+            logging.info("Today is not a friday, skipping week check")
 
         # check if everything is ok on Grafana
         logging.info("Checking if Monitoring / Grafana is OK")
