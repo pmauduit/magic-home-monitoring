@@ -1,6 +1,7 @@
 import logging
 import urllib
 from datetime import date, timedelta, datetime
+from json.decoder import JSONDecodeError
 
 import odoorpc
 import pytz
@@ -49,6 +50,9 @@ class odoo:
                 checkout_dt = datetime.strptime(checkout, '%Y-%m-%d %H:%M:%S')
                 total_time_today += (checkout_dt - checkin_dt).total_seconds()
             return timedelta(seconds=total_time_today)
+        except JSONDecodeError as e:
+            logging.error("Unable parse Odoo's response", exc_info=True)
+            return timedelta(seconds=0)
         except urllib.error.URLError as e:
             logging.error("Unable to connect to Odoo", exc_info=True)
             return timedelta(seconds=0)
